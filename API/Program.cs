@@ -1,3 +1,5 @@
+using API.Models.TodoItem;
+using Microsoft.EntityFrameworkCore;
 
 namespace API
 {
@@ -10,6 +12,8 @@ namespace API
             // Add services to the container.
 
             builder.Services.AddControllers();
+            builder.Services.AddDbContext<TodoContext>(opt =>
+                opt.UseInMemoryDatabase("TodoList"));
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
