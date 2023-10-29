@@ -1,6 +1,7 @@
 ﻿using API.Models.User;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 
 namespace API.Controllers
 {
@@ -43,7 +44,34 @@ namespace API.Controllers
 
             return BadRequest(ModelState);
         }
-        
+
+        [HttpPost("Login")]
+        public ActionResult<UserDTO> Login (LoginDTO loginDTO)
+        {
+            var user = _context.users.FirstOrDefault(u => u.Email == loginDTO.Email);
+
+            if (user == null || user.Password != loginDTO.Password) 
+            {
+                return Unauthorized();
+            }
+
+
+            
+
+            return Ok(user);
+        }
+        [HttpDelete("delete_all")]
+        public ActionResult DeleteUsers()
+        {
+            var users = _context.users.ToList();
+            if (users == null || users.Count == 0)
+            {
+                return NotFound("No users found to delete.");
+            }
+            _context.users.RemoveRange(users);
+            _context.SaveChanges();
+            return Ok("All users have been deleted.");
+        }
         private IEnumerable<UserDTO> ConvertToDTO(IEnumerable<User> users)
         {
             List<UserDTO> userDTOs = new List<UserDTO>();
