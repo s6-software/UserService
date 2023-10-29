@@ -2,9 +2,10 @@
 {
     public class User
     {
-        public string Id { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
-        public string Username { get; set; } = string.Empty;
-        public string Password { get; set; } = string.Empty;
+        public int Id { get; set; }
+        public required string Username { get; set; }
+        public required string Email { get; set; }
+        public required string Password { get; set; }
+        public DateTime RegistrationDate { get; set; }
     }
 }
