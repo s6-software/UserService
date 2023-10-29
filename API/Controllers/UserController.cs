@@ -1,4 +1,5 @@
 ﻿using API.Models.User;
+using API.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
@@ -9,40 +10,25 @@ namespace API.Controllers
     [ApiController]
     public class UserController : Controller
     {
-        private readonly UserContext _context;
+        private readonly IUserService _userService;
 
-        public UserController(UserContext userContext)
+        public UserController(IUserService userContext)
         {
-            _context = userContext;
+            _userService = userContext;
         }
         [HttpGet]
         public ActionResult<IEnumerable<UserDTO>> GetAllUsers()
         {
-            var users = _context.users.ToList();
+            var users = _userService.GetAllUsers();
             var userDTOs = ConvertToDTO(users);
 
             return Ok(userDTOs);
         }
 
         [HttpPost]
-        public ActionResult<UserDTO> CreateUser(UserDTO userDTO)
+        public string CreateUser(RegisterDTO userDTO)
         {
-            if (ModelState.IsValid)
-            {
-                User user = new User
-                {
-                    Username = userDTO.Username,
-                    Email = userDTO.Email,
-                    Password = userDTO.Password,
-                };
-
-                _context.users.Add(user);
-                _context.SaveChanges();
-                return userDTO;
-
-            }
-
-            return BadRequest(ModelState);
+            return _userService.RegisterUser(userDTO);
         }
 
         [HttpPost("Login")]
@@ -54,9 +40,6 @@ namespace API.Controllers
             {
                 return Unauthorized();
             }
-
-
-            
 
             return Ok(user);
         }
@@ -79,8 +62,6 @@ namespace API.Controllers
             {
                 userDTOs.Add(new UserDTO
                 {
-                    Username = user.Username,
-                    Password = user.Password,
                     Email = user.Email
                 });
             }

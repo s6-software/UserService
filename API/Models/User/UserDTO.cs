@@ -1,8 +1,8 @@
 ﻿namespace API.Models.User
 {
-    public class UserDTO
+    public class RegisterDTO
     {
-        public string Username { get; set; } = string.Empty;
+        public required string Username { get; set; }
         public required string Password { get; set; }
         public required string Email { get; set; }
     }
@@ -11,5 +11,11 @@
     {
         public required string Email { get; set; }
         public required string Password { get; set; }
+    }
+
+    public class UserDTO
+    {
+        public string Email { get; set; }
+
     }
 }
