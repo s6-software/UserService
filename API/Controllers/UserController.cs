@@ -34,26 +34,15 @@ namespace API.Controllers
         [HttpPost("Login")]
         public ActionResult<UserDTO> Login (LoginDTO loginDTO)
         {
-            var user = _context.users.FirstOrDefault(u => u.Email == loginDTO.Email);
+            string token = _userService.LoginUser(loginDTO);
 
-            if (user == null || user.Password != loginDTO.Password) 
-            {
-                return Unauthorized();
-            }
-
-            return Ok(user);
+            return Ok(token);
         }
         [HttpDelete("delete_all")]
         public ActionResult DeleteUsers()
         {
-            var users = _context.users.ToList();
-            if (users == null || users.Count == 0)
-            {
-                return NotFound("No users found to delete.");
-            }
-            _context.users.RemoveRange(users);
-            _context.SaveChanges();
-            return Ok("All users have been deleted.");
+            string response = _userService.DeleteAll();
+            return Ok(response);
         }
         private IEnumerable<UserDTO> ConvertToDTO(IEnumerable<User> users)
         {

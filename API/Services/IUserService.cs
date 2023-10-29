@@ -7,6 +7,8 @@ namespace API.Services
     {
         IEnumerable<User> GetAllUsers();
         string RegisterUser(RegisterDTO registerDTO);
+        string LoginUser(LoginDTO loginDTO);
+        string DeleteAll();
     }
 
     public class UserService: IUserService
@@ -34,6 +36,17 @@ namespace API.Services
             _userContext.users.Add(newUser);
             _userContext.SaveChanges();
             return $"{newUser.Username} has been created";
+        }
+
+        public string LoginUser(LoginDTO loginDTO)
+        {
+            return "aksnfkjanskfjnakncjkascn";
+        }
+
+        public string DeleteAll()
+        {
+            _userContext.users.ExecuteDelete();
+            return "wiped database.";
         }
     }
 }
