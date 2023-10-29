@@ -43,26 +43,7 @@ namespace API.Controllers
 
             return BadRequest(ModelState);
         }
-        private ActionResult<UserDTO> GetUserById(int id)
-        {
-            Console.WriteLine(id);
-
-            var user = _context.users.Find(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            var userDTO = new UserDTO
-            {
-                Username = user.Username,
-                Password = user.Password,
-                Email = user.Email
-                // Map other properties as needed
-            };
-
-            return userDTO;
-        }
+        
         private IEnumerable<UserDTO> ConvertToDTO(IEnumerable<User> users)
         {
             List<UserDTO> userDTOs = new List<UserDTO>();
@@ -73,7 +54,6 @@ namespace API.Controllers
                     Username = user.Username,
                     Password = user.Password,
                     Email = user.Email
-                    // Map other properties as needed
                 });
             }
             return userDTOs;
