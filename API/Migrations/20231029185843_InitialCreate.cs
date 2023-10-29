@@ -5,24 +5,23 @@
 namespace API.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "TodoItems",
+                name: "users",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsComplete = table.Column<bool>(type: "bit", nullable: false),
-                    Secret = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    username = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TodoItems", x => x.Id);
+                    table.PrimaryKey("PK_users", x => x.Id);
                 });
         }
 
@@ -30,7 +29,7 @@ namespace API.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "TodoItems");
+                name: "users");
         }
     }
 }
