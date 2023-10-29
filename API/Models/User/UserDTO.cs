@@ -2,8 +2,14 @@
 {
     public class UserDTO
     {
-        public required string Username { get; set; }
+        public string Username { get; set; } = string.Empty;
         public required string Password { get; set; }
         public required string Email { get; set; }
+    }
+
+    public class LoginDTO
+    {
+        public required string Email { get; set; }
+        public required string Password { get; set; }
     }
 }
