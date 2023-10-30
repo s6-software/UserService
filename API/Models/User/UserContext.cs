@@ -10,5 +10,13 @@ namespace API.Models.User
         }
 
         public DbSet<User> users{ get; set; } = null!;
+
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Email)
+                .IsUnique();
+        }
     }
 }
