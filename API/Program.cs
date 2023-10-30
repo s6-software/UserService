@@ -13,8 +13,19 @@ namespace API
             // Add services to the container.
 
             builder.Services.AddControllers();
-            builder.Services.AddDbContext<UserContext>(opt =>
-                opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            bool useInMemoryDatabase = true;
+            
+
+            if (useInMemoryDatabase)
+            {
+                builder.Services.AddDbContext<UserContext>(opt =>
+               opt.UseInMemoryDatabase(databaseName: "memoryDB"));
+            }
+            else
+            {
+                builder.Services.AddDbContext<UserContext>(opt =>
+               opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))); ;
+            }
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
