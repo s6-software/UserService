@@ -1,6 +1,7 @@
 using API.Models.User;
 using API.Services;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
 
 namespace API
 {
@@ -13,8 +14,8 @@ namespace API
             // Add services to the container.
 
             builder.Services.AddControllers();
-            bool useInMemoryDatabase = true;
-            
+
+            bool useInMemoryDatabase =  builder.Configuration.GetValue<bool>("In_Memory");
 
             if (useInMemoryDatabase)
             {
