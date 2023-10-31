@@ -9,7 +9,6 @@ namespace API.Services
         IEnumerable<User> GetAllUsers();
         string ValidateRegistration(RegisterDTO registerDTO);
         bool RegisterUser(RegisterDTO registerDTO, string uid);
-        string LoginUser(LoginDTO loginDTO);
         string DeleteAll();
     }
 
@@ -38,11 +37,6 @@ namespace API.Services
             _userContext.users.Add(newUser);
             _userContext.SaveChanges();
             return true;
-        }
-
-        public string LoginUser(LoginDTO loginDTO)
-        {
-            return "aksnfkjanskfjnakncjkascn";
         }
 
         public string DeleteAll()
