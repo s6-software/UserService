@@ -12,11 +12,13 @@ namespace API.Controllers
     {
         private readonly IUserService _userService;
         private readonly IAuthenticationService _authentication;
+        private readonly IJwtProvider _jwtProvider;
 
-        public UserController(IUserService userContext, IAuthenticationService authentication)
+        public UserController(IUserService userContext, IAuthenticationService authentication, IJwtProvider jwtProvider)
         {
             _userService = userContext;
             _authentication = authentication;
+            _jwtProvider = jwtProvider;
         }
         [HttpGet]
         public ActionResult<IEnumerable<UserDTO>> GetAllUsers()
@@ -40,7 +42,7 @@ namespace API.Controllers
         [HttpPost("login")]
         public async Task<string> Login (LoginDTO loginDTO)
         {
-            string token =  await _authentication.Login(loginDTO);
+            string token =  await _jwtProvider.Login(loginDTO);
 
             return  token;
         }
