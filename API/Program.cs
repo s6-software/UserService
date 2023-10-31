@@ -1,5 +1,7 @@
 using API.Models.User;
 using API.Services;
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
 
@@ -12,8 +14,14 @@ namespace API
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
             builder.Services.AddControllers();
+
+
+            FirebaseApp.Create(new AppOptions
+            {
+                Credential = GoogleCredential.FromFile("firebase.json")
+            });
+
 
             bool useInMemoryDatabase =  builder.Configuration.GetValue<bool>("In_Memory");
 
@@ -31,6 +39,7 @@ namespace API
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

@@ -11,10 +11,12 @@ namespace API.Controllers
     public class UserController : Controller
     {
         private readonly IUserService _userService;
+        private readonly IAuthenticationService _authentication;
 
-        public UserController(IUserService userContext)
+        public UserController(IUserService userContext, IAuthenticationService authentication)
         {
             _userService = userContext;
+            _authentication = authentication;
         }
         [HttpGet]
         public ActionResult<IEnumerable<UserDTO>> GetAllUsers()
@@ -25,18 +27,22 @@ namespace API.Controllers
             return Ok(userDTOs);
         }
 
-        [HttpPost]
-        public string CreateUser(RegisterDTO userDTO)
+        [HttpPost("register")]
+        public async Task<string> RegisterUser(RegisterDTO userDTO)
         {
-            return _userService.RegisterUser(userDTO);
+            string Uid = await _authentication.RegisterAsync(userDTO);
+
+            _userService.RegisterUser(userDTO, Uid);
+
+            return $"successfully registered {userDTO.Email}";
         }
 
-        [HttpPost("Login")]
-        public ActionResult<UserDTO> Login (LoginDTO loginDTO)
+        [HttpPost("login")]
+        public async Task<string> Login (LoginDTO loginDTO)
         {
-            string token = _userService.LoginUser(loginDTO);
+            string token =  await _authentication.Login(loginDTO);
 
-            return Ok(token);
+            return  token;
         }
         [HttpDelete("delete_all")]
         public ActionResult DeleteUsers()

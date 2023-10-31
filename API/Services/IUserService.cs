@@ -1,4 +1,5 @@
 ﻿using API.Models.User;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Services
@@ -6,12 +7,13 @@ namespace API.Services
     public interface IUserService
     {
         IEnumerable<User> GetAllUsers();
-        string RegisterUser(RegisterDTO registerDTO);
+        string ValidateRegistration(RegisterDTO registerDTO);
+        bool RegisterUser(RegisterDTO registerDTO, string uid);
         string LoginUser(LoginDTO loginDTO);
         string DeleteAll();
     }
 
-    public class UserService: IUserService
+    public class UserService : IUserService
     {
         private readonly UserContext _userContext;
 
@@ -25,17 +27,17 @@ namespace API.Services
             return _userContext.users.ToList();
         }
 
-        public string RegisterUser(RegisterDTO registerDTO)
+        public bool RegisterUser(RegisterDTO registerDTO, string uid)
         {
             var newUser = new User
             {
                 Username = registerDTO.Username,
                 Email = registerDTO.Email,
-                Password = registerDTO.Password,
+                Uid = uid,
             };
             _userContext.users.Add(newUser);
             _userContext.SaveChanges();
-            return $"{newUser.Username} has been created";
+            return true;
         }
 
         public string LoginUser(LoginDTO loginDTO)
@@ -47,6 +49,11 @@ namespace API.Services
         {
             _userContext.users.ExecuteDelete();
             return "wiped database.";
+        }
+
+        public string ValidateRegistration(RegisterDTO registerDTO)
+        {
+            throw new NotImplementedException();
         }
     }
 }
