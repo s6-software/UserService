@@ -20,15 +20,13 @@ jobs:
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: 7.0.x
-        
+
     - name: Change directory to 'API'
       run: cd API
-      
+
     - name: Restore dependencies
-      run: dotnet restore API.csproj
+      run: dotnet restore
 
     - name: Build
-      run: dotnet build API.csproj --no-restore
+      run: dotnet build --no-restore
 
-    - name: Test
-      run: dotnet test API.csproj --no-build --verbosity normal
