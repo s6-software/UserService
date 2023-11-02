@@ -51,7 +51,7 @@ jobs:
         run: docker login -u ${{ secrets.ORG_DOCKERHUB_USERNAME }} -p ${{ secrets.ORG_DOCKERHUB_TOKEN }}
 
       - name: Build the Docker image
-        run: docker build -t ${{ secrets.ORG_DOCKERHUB_USERNAME }}/UserService:latest .
+        run: docker build -t ${{ secrets.ORG_DOCKERHUB_USERNAME }}/userservice:latest .
 
       - name: Push the Docker image to Docker Hub
-        run: docker push ${{ secrets.ORG_DOCKERHUB_USERNAME }}/UserService:latest
+        run: docker push ${{ secrets.ORG_DOCKERHUB_USERNAME }}/userservice:latest
