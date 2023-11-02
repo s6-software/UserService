@@ -4,6 +4,7 @@ using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
+using System.Configuration;
 using System.Text.Json;
 
 namespace API
@@ -16,23 +17,23 @@ namespace API
 
             // Add services to the container.
             builder.Services.AddControllers();
-
+            var firebaseSettings = builder.Configuration.GetSection("Firebase");
             FirebaseApp.Create(new AppOptions
             {
                 Credential = GoogleCredential.FromJson(JsonSerializer.Serialize(
                     new
                     {
-                        type = builder.Configuration["type"],
-                        project_id = builder.Configuration["projectId"],
-                        private_key_id = builder.Configuration["private_key_id"],
-                        private_key = builder.Configuration["private_key"],
-                        client_email = builder.Configuration["client_email"],
-                        client_id = builder.Configuration["client_id"],
-                        auth_uri = builder.Configuration["auth_uri"],
-                        token_uri = builder.Configuration["token_uri"],
-                        auth_provider_x509_cert_url = builder.Configuration["auth_provider_x509_cert_url"],
-                        client_x509_cert_url = builder.Configuration["client_x509_cert_url"],
-                        universe_domain = builder.Configuration["universe_domain"]
+                        type = firebaseSettings["type"],
+                        project_id = firebaseSettings["projectId"],
+                        private_key_id = firebaseSettings["private_key_id"],
+                        private_key = firebaseSettings["private_key"],
+                        client_email = firebaseSettings["client_email"],
+                        client_id = firebaseSettings["client_id"],
+                        auth_uri = firebaseSettings["auth_uri"],
+                        token_uri = firebaseSettings["token_uri"],
+                        auth_provider_x509_cert_url = firebaseSettings["auth_provider_x509_cert_url"],
+                        client_x509_cert_url = firebaseSettings["client_x509_cert_url"],
+                        universe_domain = firebaseSettings["universe_domain"]
                     }
                 )
                 )
@@ -58,7 +59,7 @@ namespace API
             builder.Services.AddHttpClient<IJwtProvider, JwtProvider>((sp, httpClient ) =>
             {
                 var config = sp.GetRequiredService<IConfiguration>();
-                httpClient.BaseAddress = new Uri(config["GOOGLE_APIS_JWT"]);
+                httpClient.BaseAddress = new Uri(firebaseSettings["GOOGLE_APIS_JWT"]);
             });
             builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
             var app = builder.Build();
