@@ -28,4 +28,4 @@ jobs:
       run: dotnet build ./test/test.csproj --configuration Release
       
     - name: Test API
-      run: dotnet test ./test/test.csproj --configuration Release
+      run: dotnet test ./UserTests/UserTests.csproj --configuration Release
