@@ -26,3 +26,12 @@ jobs:
 
     - name: Test 
       run: dotnet test ./Test/Test.csproj --configuration Release
+
+    - name: Login to Docker Hub
+      run: docker login -u ${{ secrets.ORG_DOCKERHUB_USERNAME }} -p ${{ secrets.ORG_DOCKERHUB_TOKEN }}
+
+    - name: Build the Docker image
+      run: docker build -t ${{ secrets.ORG_DOCKERHUB_USERNAME }}/<UserService>:<latest> .
+
+    - name: Push the Docker image to Docker Hub
+      run: docker push ${{ secrets.ORG_DOCKERHUB_USERNAME }}/<UserService>:<latest>
