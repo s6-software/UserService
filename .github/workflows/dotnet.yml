@@ -21,11 +21,14 @@ jobs:
       with:
         dotnet-version: 7.0.x
 
+    - name: Change directory to 'API'
+      run: cd API
+
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore API/YourProject.csproj
 
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build API/YourProject.csproj --no-restore
 
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test API/YourProject.csproj --no-build --verbosity normal
