@@ -36,7 +36,13 @@ jobs:
         with:
           dotnet-version: '7.x' # Update to the desired version
 
-      - name: Test 
+      - name: Restore Test Dependencies
+        run: dotnet restore ./Test/Test.csproj
+
+      - name: Build Test Project
+        run: dotnet build ./Test/Test.csproj --configuration Release
+
+      - name: Test
         run: dotnet test ./Test/Test.csproj --configuration Release
 
   docker-push:
