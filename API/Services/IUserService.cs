@@ -1,15 +1,15 @@
-﻿using API.Models.User;
+﻿using API.Migrations;
+using API.Models.User;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
 
 namespace API.Services
 {
     public interface IUserService
     {
-        IEnumerable<User> GetAllUsers();
-        string ValidateRegistration(RegisterDTO registerDTO);
+        bool ValidateRegistration(RegisterDTO registerDTO);
         bool RegisterUser(RegisterDTO registerDTO, string uid);
-        string DeleteAll();
     }
 
     public class UserService : IUserService
@@ -18,13 +18,7 @@ namespace API.Services
 
         public UserService(UserContext context)
         {
-            context.Database.Migrate();
             _userContext = context;
-        }
-
-        public IEnumerable<User> GetAllUsers()
-        {
-            return _userContext.users.ToList();
         }
 
         public bool RegisterUser(RegisterDTO registerDTO, string uid)
@@ -40,15 +34,60 @@ namespace API.Services
             return true;
         }
 
-        public string DeleteAll()
+
+        public bool ValidateRegistration(RegisterDTO registerDTO)
         {
-            _userContext.users.ExecuteDelete();
-            return "wiped database.";
+            string email = registerDTO.Email;
+            string password = registerDTO.Password;
+            string username = registerDTO.Username;
+
+            if (IsStrongPassword(password) == false || IsValidEmail(email) == false || IsValidUsername(username) == false)
+            {
+                return false;
+            }
+
+            return true;
+
         }
 
-        public string ValidateRegistration(RegisterDTO registerDTO)
+        private bool IsStrongPassword (string password)
         {
-            throw new NotImplementedException();
+            string numberPattern = @"\d";
+            string capitalLetterPattern = "[A-Z]";
+            string specialCharacterPattern = @"[^A-Za-z0-9]";
+
+            bool containsNumber = Regex.IsMatch(password, numberPattern);
+            bool containsCapitalLetter = Regex.IsMatch(password, capitalLetterPattern);
+            bool containsSpecialChar = Regex.IsMatch(password, specialCharacterPattern);
+            bool meetsMinimumLength = password.Length >= 9;
+
+            return containsNumber && containsCapitalLetter && containsSpecialChar && meetsMinimumLength;
+        }
+
+        private bool IsValidEmail(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                return false;
+
+            try
+            {
+                string emailPattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
+                return Regex.IsMatch(email, emailPattern);
+            }
+            catch (RegexMatchTimeoutException)
+            {
+                return false;
+            }
+        }
+
+        public static bool IsValidUsername(string username)
+        {
+            if (string.IsNullOrWhiteSpace(username))
+                return false;
+
+            string usernamePattern = "^[a-zA-Z]{2,}$";
+
+            return Regex.IsMatch(username, usernamePattern);
         }
     }
 }
