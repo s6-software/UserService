@@ -25,6 +25,11 @@ namespace API.Controllers
         [HttpPost("register")]
         public async Task<string> RegisterUser(RegisterDTO userDTO)
         {
+            if (_userService.ValidateRegistration(userDTO) == false)
+            {
+                return "invalid input";
+            }
+
             string Uid = await _authentication.RegisterAsync(userDTO);
 
             _userService.RegisterUser(userDTO, Uid);
