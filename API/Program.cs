@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
 using System.Configuration;
 using System.Text.Json;
+using Microsoft.Azure.Services.AppAuthentication;
+using Microsoft.Extensions.Configuration.AzureKeyVault;
 
 namespace API
 {
@@ -17,6 +19,9 @@ namespace API
 
             // Add services to the container.
             builder.Services.AddControllers();
+            
+            
+            
             var firebaseSettings = builder.Configuration.GetSection("Firebase");
             FirebaseApp.Create(new AppOptions
             {
@@ -63,6 +68,7 @@ namespace API
             });
             builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
             var app = builder.Build();
+
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
