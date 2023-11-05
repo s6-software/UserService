@@ -19,14 +19,7 @@ namespace API.Controllers
             _userService = userContext;
             _authentication = authentication;
             _jwtProvider = jwtProvider;
-        }
-        [HttpGet]
-        public ActionResult<IEnumerable<UserDTO>> GetAllUsers()
-        {
-            var users = _userService.GetAllUsers();
-            var userDTOs = ConvertToDTO(users);
 
-            return Ok(userDTOs);
         }
 
         [HttpPost("register")]
@@ -45,12 +38,6 @@ namespace API.Controllers
             string token =  await _jwtProvider.Login(loginDTO);
 
             return  token;
-        }
-        [HttpDelete("delete_all")]
-        public ActionResult DeleteUsers()
-        {
-            string response = _userService.DeleteAll();
-            return Ok(response);
         }
         private IEnumerable<UserDTO> ConvertToDTO(IEnumerable<User> users)
         {
