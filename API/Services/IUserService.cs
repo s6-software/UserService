@@ -18,6 +18,7 @@ namespace API.Services
 
         public UserService(UserContext context)
         {
+            context.Database.Migrate();
             _userContext = context;
         }
 
