@@ -3,9 +3,9 @@ name: .NET
 on:
   push:
     branches:
-      - main
-      - staging
       - development
+      - staging
+      - production
 
 jobs:
   build:
@@ -18,7 +18,7 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '7.x' # Update to the desired version
+          dotnet-version: '7.x'
 
       - name: Build API
         run: dotnet build ./API/API.csproj --configuration Release
@@ -34,7 +34,7 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '7.x' # Update to the desired version
+          dotnet-version: '7.x' 
 
       - name: Restore Test Dependencies
         run: dotnet restore ./Test/Test.csproj
@@ -48,6 +48,8 @@ jobs:
   docker-push:
     needs: test
     runs-on: ubuntu-latest
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/staging' || github.ref == 'refs/heads/production')
+
 
     steps:
       - name: Checkout code
