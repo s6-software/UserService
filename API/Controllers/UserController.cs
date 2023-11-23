@@ -44,17 +44,6 @@ namespace API.Controllers
 
             return  token;
         }
-        private IEnumerable<UserDTO> ConvertToDTO(IEnumerable<User> users)
-        {
-            List<UserDTO> userDTOs = new List<UserDTO>();
-            foreach (var user in users)
-            {
-                userDTOs.Add(new UserDTO
-                {
-                    Email = user.Email
-                });
-            }
-            return userDTOs;
-        }
+        
     }
 }
