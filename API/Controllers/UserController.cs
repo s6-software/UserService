@@ -44,6 +44,11 @@ namespace API.Controllers
 
             return  token;
         }
+        [HttpGet("get")]
+        public string test()
+        {
+            return "Its working!";
+        }
         
     }
 }
