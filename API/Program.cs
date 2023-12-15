@@ -1,14 +1,7 @@
 using API.Models.User;
 using API.Services;
 using FirebaseAdmin;
-using Google.Apis.Auth.OAuth2;
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel;
-using System.Configuration;
-using System.Text.Json;
-using Microsoft.Azure.Services.AppAuthentication;
-using Microsoft.Extensions.Configuration.AzureKeyVault;
-
 namespace API
 {
     public class Program
@@ -23,26 +16,7 @@ namespace API
             
             
             var firebaseSettings = builder.Configuration.GetSection("Firebase");
-            FirebaseApp.Create(new AppOptions
-            {
-                Credential = GoogleCredential.FromJson(JsonSerializer.Serialize(
-                    new
-                    {
-                        type = firebaseSettings["type"],
-                        project_id = firebaseSettings["projectId"],
-                        private_key_id = firebaseSettings["private_key_id"],
-                        private_key = firebaseSettings["private_key"],
-                        client_email = firebaseSettings["client_email"],
-                        client_id = firebaseSettings["client_id"],
-                        auth_uri = firebaseSettings["auth_uri"],
-                        token_uri = firebaseSettings["token_uri"],
-                        auth_provider_x509_cert_url = firebaseSettings["auth_provider_x509_cert_url"],
-                        client_x509_cert_url = firebaseSettings["client_x509_cert_url"],
-                        universe_domain = firebaseSettings["universe_domain"]
-                    }
-                )
-                )
-            });
+            FirebaseApp.Create();
 
             bool useInMemoryDatabase =  builder.Configuration.GetValue<bool>("In_Memory");
 
